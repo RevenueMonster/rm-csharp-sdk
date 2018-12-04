@@ -11,7 +11,6 @@ namespace RevenueMonsterOpenAPI
 {
     public class Payment
     {
-        private static readonly HttpClient client = new HttpClient();
 
         public async Task<QuickPay> QuickPay(Object data, string accessToken, string privateKey, string environment)
         {
@@ -41,6 +40,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
@@ -93,6 +93,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
@@ -145,6 +146,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);

@@ -11,8 +11,6 @@ namespace RevenueMonsterOpenAPI
 {
     public class Authorization
     {
-        private static readonly HttpClient client = new HttpClient();
-
         public async Task<ClientCredentials> GetClientCredentials(string clientId, string clientSecret, string environment)
         {
             ClientCredentials result = new ClientCredentials();
@@ -39,6 +37,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodeParameter);
                 var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -87,6 +86,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodeParameter);
                 var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();

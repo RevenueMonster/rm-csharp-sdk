@@ -13,8 +13,6 @@ namespace RevenueMonsterOpenAPI
 {
     class Signature
     {
-        private static readonly HttpClient client = new HttpClient();
-
         public async Task<GenerateSignatureResult> GenerateSignature(Object data, string method, string nonceStr, string privateKey, string requestUrl, string signType, string timestamp, string environment)
         {
             GenerateSignatureResult result = new GenerateSignatureResult();
@@ -43,6 +41,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
 
@@ -92,6 +91,7 @@ namespace RevenueMonsterOpenAPI
                 var buffer = System.Text.Encoding.UTF8.GetBytes(content);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                HttpClient client = new HttpClient();
                 var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
 
