@@ -3,7 +3,6 @@ using RevenueMonsterOpenAPI.Constant;
 using RevenueMonsterOpenAPI.Model;
 using RevenueMonsterOpenAPI.Util;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -26,20 +25,22 @@ namespace RevenueMonsterOpenAPI
                 {
                     url = String.Concat(Url.SandBoxOAuth, "/v1/token");
                 }
-                else if(environment == "production")
+                else if (environment == "production")
                 {
                     url = String.Concat(Url.ProductionOAuth, "/v1/token");
                 }
 
-                var values = new Dictionary<string, string>
+                var values = new
                 {
-                   { "grantType", "client_credentials" }
+                    grantType = "client_credentials"
                 };
 
-                var content = new FormUrlEncodedContent(values);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                var content = JsonConvert.SerializeObject(values);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodeParameter);
-                var response = await client.PostAsync(url, content);
+                var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -76,16 +77,18 @@ namespace RevenueMonsterOpenAPI
                     url = String.Concat(Url.ProductionOAuth, "/v1/token");
                 }
 
-                var values = new Dictionary<string, string>
+                var values = new
                 {
-                   { "grantType", "refresh_token" },
-                   { "refreshToken", refreshToken }
+                    grantType = "refresh_token",
+                    refreshToken = refreshToken
                 };
 
-                var content = new FormUrlEncodedContent(values);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                var content = JsonConvert.SerializeObject(values);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encodeParameter);
-                var response = await client.PostAsync(url, content);
+                var response = await client.PostAsync(url, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
