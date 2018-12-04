@@ -120,4 +120,5 @@ using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
 var result = await payment.Reverse(data, accessToken, privateKey, "sandbox");
 ```
 
+### Sample
 Sample can be found [here](https://github.com/simonlim94/API-SDK-CsharpSample)
