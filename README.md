@@ -42,26 +42,19 @@ The .NET framework you would need for this project is 4.5 or above
 ![PastePublicKey](https://storage.googleapis.com/rm-portal-assets/img/rm-landing/pastePublicKey.png)
 
 * Client Credentials (Authentication)
+    * To get refresh token and access token(expired after 2 hours) with using provided clientId and clientSecret
 ```
-var clientId = Properties.Settings.Default["clientId"].ToString();
-var clientSecret = Properties.Settings.Default["clientSecret"].ToString();
 var result = await authorization.GetClientCredentials(clientId, clientSecret, "sandbox");
-Properties.Settings.Default["accessToken"] = result.accessToken;
-Properties.Settings.Default["refreshToken"] = result.refreshToken;
-Properties.Settings.Default.Save();
 ```
 
 * Refresh Token (Authentication)
+    * To get new access token(expired after 2 hours) with using provided clientId and clientSecret (recommended to schedule to run this fucntion on every less than 2 hours) in order to avoid expired access token error.
 ```
-var clientId = Properties.Settings.Default["clientId"].ToString();
-var clientSecret = Properties.Settings.Default["clientSecret"].ToString();
-var refreshToken = Properties.Settings.Default["refreshToken"].ToString();
 var result = await authorization.RefreshToken(clientId, clientSecret, refreshToken, "sandbox");
-Properties.Settings.Default["accessToken"] = result.accessToken;
-Properties.Settings.Default.Save();
 ```
 
 * Payment (Quick Pay) - Payment
+    * To make payment by scanning barcode/authcode from user
 ```
 var data = new
 {
@@ -73,18 +66,11 @@ var data = new
    ipAddress = "127.0.0.1",
    storeId = "123412341234", 
 };
-var accessToken = Properties.Settings.Default["accessToken"].ToString();
-string privateKey;
-var path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\\privateKey.txt"; //storing private key in a text file, you might use alternative way
-var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-{
-   privateKey = streamReader.ReadToEnd();
-}
 var result = await payment.QuickPay(data, accessToken, privateKey, "sandbox");
 ```
 
 * Payment (Quick Pay) - Refund
+    * To refund the successful transactions 
 ```
 var data = new
 {
@@ -92,32 +78,86 @@ var data = new
    refund = new { type = "FULL", currencyType = "MYR", amount = 100 },
    reason = "test",
 };
-var accessToken = Properties.Settings.Default["accessToken"].ToString();
-string privateKey;
-var path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\\privateKey.txt"; //storing private key in a text file, you might use alternative way
-var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-{
-   privateKey = streamReader.ReadToEnd();
-}
 var result = await payment.Refund(data, accessToken, privateKey, "sandbox");
 ```
 
 * Payment (Quick Pay) - Reverse
+    * To reverse time-out or problematic transaction
 ```
 var data = new
 {
     orderId = "12345678131",
 };
-var accessToken = Properties.Settings.Default["accessToken"].ToString();
-string privateKey;
-var path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\\privateKey.txt"; //storing private key in a text file, you might use alternative way
-var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-{
-   privateKey = streamReader.ReadToEnd();
-}
 var result = await payment.Reverse(data, accessToken, privateKey, "sandbox");
+```
+
+* Give Loyalty Point 
+    * To give certain loyalty points to a loyalty member
+```
+var data = new
+{
+    point = 100,
+    type = "ID",
+    memberId = "7265269757706630308",
+    // type = "PHONENUMBER",
+    // countryCode = "60",
+    // phoneNumber = "123456789",
+};
+var result = await loyalty.GiveLoyaltyPoint(data, accessToken, privateKey, "sandbox");
+```
+
+* Get Loyalty Members 
+    * To get details of every loyalty members
+```
+var result = await loyalty.GetLoyaltyMembers(accessToken, privateKey, "sandbox");
+```
+
+* Get Loyalty Member
+    * To get details of a certain loyalty member
+```
+string memberId = "7265269757706630308";
+var result = await loyalty.GetLoyaltyMembers(memberId, accessToken, privateKey, "sandbox");
+```
+
+* Get Loyalty Member Point History
+    * To get details of point history of a certain loyalty member
+```
+string memberId = "7265269757706630308";
+var result = await loyalty.GetLoyaltyMemberPointHistory(memberId, accessToken, privateKey, "sandbox");
+```
+
+* Issue Voucher
+    * To issue voucher to customer
+```
+var batchKey = "EhQKCB1lcoNoYw50EBXVzd3RraqTDRIYCgxWb5VjaGVy6mF0Y2gQ55azPp_qz6xK";
+var result = await voucher.IssueVoucher(batchKey, accessToken, privateKey, "sandbox");
+```
+
+* Void Voucher
+    * To void voucher of customer
+```
+var code = "BcHeTSMoz";
+var result = await voucher.VoidVoucher(code, accessToken, privateKey, "sandbox");
+```
+
+* Get Voucher By Code
+    * To get detail of a single voucher by code
+```
+var code = "BcHeTSMoz";
+var result = await voucher.GetVoucherByCode(code, accessToken, privateKey, "sandbox");
+```
+
+* Get Voucher Batches
+    * To get detail of a multiple voucher batches
+```
+var result = await voucher.GetVoucherBatches(accessToken, privateKey, "sandbox");
+```
+
+* Get Voucher Batch By Key
+    * To get detail of a voucher batch by batch key
+```
+var batchKey = "EhQKCB1lcoNoYw50EBXVzd3RraqTDRIYCgxWb5VjaGVy6mF0Y2gQ55azPp_qz6xK";
+var result = await voucher.GetVoucherBatchByKey(batchKey, accessToken, privateKey, "sandbox");
 ```
 
 ### Sample

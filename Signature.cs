@@ -29,7 +29,10 @@ namespace RevenueMonsterOpenAPI
                 }
 
                 GenerateSignatureRequestData generateSignatureData = new GenerateSignatureRequestData();
-                generateSignatureData.data = data;
+                if (data != null)
+                {
+                    generateSignatureData.data = data;
+                }
                 generateSignatureData.method = method;
                 generateSignatureData.nonceStr = nonceStr;
                 generateSignatureData.privateKey = privateKey;

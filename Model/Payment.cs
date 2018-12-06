@@ -58,7 +58,7 @@ namespace RevenueMonsterOpenAPI.Model
         public string title { get; set; }
         public string detail { get; set; }
         public string additionalData { get; set; }
-        public Int32 amount { get; set; }
+        public Int64 amount { get; set; }
     }
 
     public class Payee
@@ -74,7 +74,7 @@ namespace RevenueMonsterOpenAPI.Model
         public Order order { get; set; }
         public string terminalId { get; set; }
         public string currencyType { get; set; }
-        public Int32 balanceAmount { get; set; }
+        public Int64 balanceAmount { get; set; }
         public Payee payee { get; set; }
         public string platform { get; set; }
         public string method { get; set; }
