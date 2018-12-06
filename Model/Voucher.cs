@@ -48,11 +48,15 @@ namespace RevenueMonsterOpenAPI.Model
 
     public class Voucher
     {
+        public string id { get; set; }
         public string key { get; set; }
         public string label { get; set; }
         public string redemptionRuleKey { get; set; }
         public string voucherBatchKey { get; set; }
         public string type { get; set; }
+        public Int64 quantity { get; set; }
+        public Int64 balanceQuantity { get; set; }
+        public Int64 usedQuantity { get; set; }
         public Int64 amount { get; set; }
         public Int64 discountRate { get; set; }
         public Int64 minimumSpendAmount { get; set; }
