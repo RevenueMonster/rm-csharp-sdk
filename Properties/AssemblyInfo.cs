@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RevenueMonsterOpenAPI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("This is an C# SDK that maps some of the RESTful methods documented at doc.revenuemonster.my.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Revenue Monster")]
 [assembly: AssemblyProduct("RevenueMonsterOpenAPI")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
