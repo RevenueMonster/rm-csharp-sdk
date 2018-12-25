@@ -30,6 +30,15 @@ The .NET framework you would need for this project is 4.5 or above
 * Payment (Quick Pay) - Payment
 * Payment (Quick Pay) - Refund
 * Payment (Quick Pay) - Reverse
+* Give Loyalty Point
+* Get Loyalty Members 
+* Get Loyalty Member
+* Get Loyalty Member Point History
+* Issue Voucher
+* Void Voucher
+* Get Voucher By Code
+* Get Voucher Batches
+* Get Voucher Batch By Key
 
 ### Usage
 1. "sandbox" is for sandbox environment.
@@ -162,3 +171,6 @@ var result = await voucher.GetVoucherBatchByKey(batchKey, accessToken, privateKe
 
 ### Sample
 Sample can be found [here](https://github.com/simonlim94/API-SDK-CsharpSample)
+
+### Nuget
+[Nuget Package](https://www.nuget.org/packages/RevenueMonsterOpenAPI/)
