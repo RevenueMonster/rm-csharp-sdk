@@ -12,11 +12,25 @@ namespace RevenueMonsterOpenAPI.Util
             string dataStr = JsonConvert.SerializeObject(data);
             //sorting purpose
             JObject obj = JObject.Parse(dataStr);
-            var sortedObj = new JObject(
-                obj.Properties().OrderByDescending(prop => prop.Type)
-            );
-            string output = sortedObj.ToString(Formatting.None);
+            Sort(obj);
+            string output = obj.ToString(Formatting.None);
             return output;
+        }
+
+        public static void Sort(JObject jObj)
+        {
+            var props = jObj.Properties().ToList();
+            foreach (var prop in props)
+            {
+                prop.Remove();
+            }
+
+            foreach (var prop in props.OrderBy(p => p.Name))
+            {
+                jObj.Add(prop);
+                if (prop.Value is JObject)
+                    Sort((JObject)prop.Value);
+            }
         }
 
     }
