@@ -24,21 +24,40 @@ The .NET framework you would need for this project is 4.5 or above
 [Google Drive](https://drive.google.com/open?id=1-eDde0nrf2AJ6zZDifM_23_n1HxGJ8r2)
 
 ### Covered Functions
-* Signature Algorithm
-* Client Credentials (Authentication)
-* Refresh Token (Authentication)
-* Payment (Quick Pay) - Payment
-* Payment (Quick Pay) - Refund
-* Payment (Quick Pay) - Reverse
-* Give Loyalty Point
-* Get Loyalty Members 
-* Get Loyalty Member
-* Get Loyalty Member Point History
-* Issue Voucher
-* Void Voucher
-* Get Voucher By Code
-* Get Voucher Batches
-* Get Voucher Batch By Key
+- [x] Signature Algorithm
+- [x] Client Credentials (Authentication)
+- [x] Refresh Token (Authentication)
+- [ ] Get Merchant Profile
+- [ ] Get Merchant Subscriptions
+- [ ] Get Stores
+- [ ] Get Stores By ID
+- [ ] Create Store
+- [ ] Update Store
+- [ ] Delete Store
+- [ ] Get User Profile
+- [ ] Payment (Transaction QR) - Create Transaction QRCode/URL
+- [ ] Payment (Transaction QR) - Get Transaction QRCode/URL
+- [ ] Payment (Transaction QR) - Get Transaction QRCode/URL By Code
+- [ ] Payment (Transaction QR) - Get Transactions By Code
+- [x] Payment (Quick Pay) - Payment
+- [x] Payment (Quick Pay) - Refund
+- [x] Payment (Quick Pay) - Reverse
+- [ ] Payment (Quick Pay) - Get All Payment Transactions
+- [ ] Payment (Quick Pay) - Get All Payment Transaction By ID
+- [ ] Payment (Quick Pay) - Get All Payment Transaction By OID
+- [ ] Payment (Quick Pay) - Daily Settlement Report
+- [x] Give Loyalty Point
+- [x] Get Loyalty Members 
+- [x] Get Loyalty Member
+- [x] Get Loyalty Member Point History
+- [x] Issue Voucher
+- [x] Void Voucher
+- [x] Get Voucher By Code
+- [x] Get Voucher Batches
+- [x] Get Voucher Batch By Key
+- [ ] Send Notification (Merchant)
+- [ ] Send Notification (Store)
+- [ ] Send Notification (User)
 
 ### Usage
 1. "sandbox" is for sandbox environment.
