@@ -15,7 +15,6 @@ namespace RevenueMonsterOpenAPI
         public async Task<QuickPay> QuickPay(Object data, string accessToken, string privateKey, string environment)
         {
             string compactJson = SignatureUtil.GenerateCompactJson(data);
-            string encode = Encode.Base64Encode(compactJson);
             string method = "post";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
@@ -30,8 +29,9 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(data, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature(compactJson, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             QuickPay result = new QuickPay();
             try
             {
@@ -42,7 +42,7 @@ namespace RevenueMonsterOpenAPI
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.PostAsync(requestUrl, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -67,7 +67,6 @@ namespace RevenueMonsterOpenAPI
         public async Task<Refund> Refund(Object data, string accessToken, string privateKey, string environment)
         {
             string compactJson = SignatureUtil.GenerateCompactJson(data);
-            string encode = Encode.Base64Encode(compactJson);
             string method = "post";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
@@ -82,19 +81,19 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(data, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature(compactJson, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             Refund result = new Refund();
             try
             {
-                var content = JsonConvert.SerializeObject(data);
-                var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(compactJson);
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.PostAsync(requestUrl, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -119,7 +118,6 @@ namespace RevenueMonsterOpenAPI
         public async Task<Reverse> Reverse(Object data, string accessToken, string privateKey, string environment)
         {
             string compactJson = SignatureUtil.GenerateCompactJson(data);
-            string encode = Encode.Base64Encode(compactJson);
             string method = "post";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
@@ -133,10 +131,10 @@ namespace RevenueMonsterOpenAPI
             }
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-            string textParameters = String.Format("data={0}&method={1}&nonceStr={2}&requestURl={3}&signType={4}&timestamp=", encode, method, requestUrl, signType, timestamp);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(data, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature(compactJson, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             Reverse result = new Reverse();
             try
             {
@@ -147,7 +145,7 @@ namespace RevenueMonsterOpenAPI
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.PostAsync(requestUrl, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();

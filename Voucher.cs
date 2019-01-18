@@ -30,8 +30,9 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(data, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             IssueVoucherResult result = new IssueVoucherResult();
             try
             {
@@ -42,7 +43,7 @@ namespace RevenueMonsterOpenAPI
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.PostAsync(requestUrl, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -83,8 +84,9 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(data, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             VoidVoucherResult result = new VoidVoucherResult();
             try
             {
@@ -95,7 +97,7 @@ namespace RevenueMonsterOpenAPI
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.PostAsync(requestUrl, byteContent);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -133,15 +135,16 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             GetVoucherByCodeResult result = new GetVoucherByCodeResult();
             try
             {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.GetAsync(requestUrl);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -179,15 +182,16 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             GetVoucherBatchesResult result = new GetVoucherBatchesResult();
             try
             {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.GetAsync(requestUrl);
                 var responseStr = await response.Content.ReadAsStringAsync();
@@ -226,15 +230,16 @@ namespace RevenueMonsterOpenAPI
             string signType = "sha256";
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
-            GenerateSignatureResult signatureResult = new GenerateSignatureResult();
-            signatureResult = await signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            string signatureResult = "";
+            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = "sha256 " + signatureResult;
             GetVoucherBatchByKeyResult result = new GetVoucherBatchByKeyResult();
             try
             {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
-                client.DefaultRequestHeaders.Add("X-Signature", signatureResult.signature);
+                client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
                 var response = await client.GetAsync(requestUrl);
                 var responseStr = await response.Content.ReadAsStringAsync();

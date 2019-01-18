@@ -54,6 +54,7 @@
     <Compile Include="Model\Payment.cs" />
     <Compile Include="Model\Signature.cs" />
     <Compile Include="Model\Voucher.cs" />
+    <Compile Include="Util\PemKeyUtils.cs" />
     <Compile Include="Voucher.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,68 +2,56 @@
 using RevenueMonsterOpenAPI.Constant;
 using RevenueMonsterOpenAPI.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using RevenueMonsterOpenAPI.Util;
 
 namespace RevenueMonsterOpenAPI
 {
     class Signature
     {
-        public async Task<GenerateSignatureResult> GenerateSignature(Object data, string method, string nonceStr, string privateKey, string requestUrl, string signType, string timestamp, string environment)
+        public string GenerateSignature(string compactJson, string method, string nonceStr, string privateKey, string requestUrl, string signType, string timestamp, string environment)
         {
-            GenerateSignatureResult result = new GenerateSignatureResult();
+            string signedData = "";
             try
             {
-                string url = "";
-                if (environment == "sandbox")
+                //GenerateSignatureResult result = new GenerateSignatureResult();
+                string plainText = "";
+                if (compactJson != "")
                 {
-                    url = String.Concat(Url.SandBoxOpen, "/tool/signature/generate");
-                }
-                else if (environment == "production")
-                {
-                    url = String.Concat(Url.ProductionOpen, "/tool/signature/generate");
-                }
-
-                GenerateSignatureRequestData generateSignatureData = new GenerateSignatureRequestData();
-                if (data != null)
-                {
-                    generateSignatureData.data = data;
-                }
-                generateSignatureData.method = method;
-                generateSignatureData.nonceStr = nonceStr;
-                generateSignatureData.privateKey = privateKey;
-                generateSignatureData.requestUrl = requestUrl;
-                generateSignatureData.signType = signType;
-                generateSignatureData.timestamp = timestamp;
-
-                var content = JsonConvert.SerializeObject(generateSignatureData); 
-                var buffer = System.Text.Encoding.UTF8.GetBytes(content);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                HttpClient client = new HttpClient();
-                var response = await client.PostAsync(url, byteContent);
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonAsString = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<GenerateSignatureResult>(jsonAsString);
+                    string encodedData = Encode.Base64Encode(compactJson);
+                    plainText = String.Format("data={0}&method={1}&nonceStr={2}&requestUrl={3}&signType={4}&timestamp={5}", encodedData, method, nonceStr, requestUrl, signType, timestamp);
                 }
                 else
                 {
-                    result = JsonConvert.DeserializeObject<GenerateSignatureResult>(response.Content.ReadAsStringAsync().Result);
+                    plainText = String.Format("method={0}&nonceStr={1}&requestUrl={2}&signType={3}&timestamp={4}", method, nonceStr, requestUrl, signType, timestamp);
                 }
+                byte[] plainTextByte = Encoding.UTF8.GetBytes(plainText);
+                RSACryptoServiceProvider provider = PemKeyUtils.GetRSAProviderFromPemFile(privateKey);
+                string prikey = provider.ToXmlString(true);
+                byte[] signedBytes = provider.SignData(plainTextByte, CryptoConfig.MapNameToOID("SHA256"));
+                signedData = Convert.ToBase64String(signedBytes);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error", ex.Message);
+                Console.WriteLine(ex.Message);
             }
-            return result;
+            return signedData;
         }
+
+        public static byte[] RSAEncrypt(byte[] plaintext, string destKey)
+        {
+            byte[] encryptedData;
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            rsa.FromXmlString(destKey);
+            encryptedData = rsa.Encrypt(plaintext, true);
+            rsa.Dispose();
+            return encryptedData;
+        }
+
 
         public async Task<VerifySignatureResult> VerifySignature(Object data, string method, string nonceStr, string publicKey, string requestUrl, string signType, string timestamp, string signature, string environment)
         {
