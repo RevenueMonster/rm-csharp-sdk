@@ -11,7 +11,7 @@ namespace RevenueMonsterOpenAPI
 {
     public class Voucher
     {
-        public async Task<IssueVoucherResult> IssueVoucher(string batchKey, string accessToken, string privateKey, string environment)
+        public async Task<IssueVoucherResult> IssueVoucher(string batchKey)
         {
             Object data = new { };
             string compactJson = SignatureUtil.GenerateCompactJson(data);
@@ -19,11 +19,11 @@ namespace RevenueMonsterOpenAPI
             string method = "post";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
-            if (environment == "sandbox")
+            if (ProjectEnvironment.environment == "sandbox")
             {
                 requestUrl = String.Concat(Url.SandBoxOpen, "/v3/voucher-batch/" + batchKey + "/issue");
             }
-            else if (environment == "production")
+            else if (ProjectEnvironment.environment == "production")
             {
                 requestUrl = String.Concat(Url.ProductionOpen, "/v3/voucher-batch/" + batchKey + "/issue");
             }
@@ -31,7 +31,7 @@ namespace RevenueMonsterOpenAPI
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
             string signatureResult = "";
-            signatureResult = signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = signature.GenerateSignature(null, method, nonceStr, ProjectEnvironment.privateKey, requestUrl, signType, timestamp, ProjectEnvironment.environment);
             signatureResult = "sha256 " + signatureResult;
             IssueVoucherResult result = new IssueVoucherResult();
             try
@@ -41,7 +41,7 @@ namespace RevenueMonsterOpenAPI
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ProjectEnvironment.accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
@@ -65,7 +65,7 @@ namespace RevenueMonsterOpenAPI
             return result;
         }
 
-        public async Task<VoidVoucherResult> VoidVoucher(string code, string accessToken, string privateKey, string environment)
+        public async Task<VoidVoucherResult> VoidVoucher(string code)
         {
             Object data = new { };
             string compactJson = SignatureUtil.GenerateCompactJson(data);
@@ -73,11 +73,11 @@ namespace RevenueMonsterOpenAPI
             string method = "post";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
-            if (environment == "sandbox")
+            if (ProjectEnvironment.environment == "sandbox")
             {
                 requestUrl = String.Concat(Url.SandBoxOpen, "/v3/voucher/" + code + "/void");
             }
-            else if (environment == "production")
+            else if (ProjectEnvironment.environment == "production")
             {
                 requestUrl = String.Concat(Url.ProductionOpen, "/v3/voucher/" + code + "/void");
             }
@@ -85,7 +85,7 @@ namespace RevenueMonsterOpenAPI
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
             string signatureResult = "";
-            signatureResult = signature.GenerateSignature(null, method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = signature.GenerateSignature(null, method, nonceStr, ProjectEnvironment.privateKey, requestUrl, signType, timestamp, ProjectEnvironment.environment);
             signatureResult = "sha256 " + signatureResult;
             VoidVoucherResult result = new VoidVoucherResult();
             try
@@ -95,7 +95,7 @@ namespace RevenueMonsterOpenAPI
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ProjectEnvironment.accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
@@ -119,16 +119,16 @@ namespace RevenueMonsterOpenAPI
             return result;
         }
 
-        public async Task<GetVoucherByCodeResult> GetVoucherByCode(string code, string accessToken, string privateKey, string environment)
+        public async Task<GetVoucherByCodeResult> GetVoucherByCode(string code)
         {
             string method = "get";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
-            if (environment == "sandbox")
+            if (ProjectEnvironment.environment == "sandbox")
             {
                 requestUrl = String.Concat(Url.SandBoxOpen, "/v3/voucher/" + code);
             }
-            else if (environment == "production")
+            else if (ProjectEnvironment.environment == "production")
             {
                 requestUrl = String.Concat(Url.ProductionOpen, "/v3/voucher/" + code);
             }
@@ -136,13 +136,13 @@ namespace RevenueMonsterOpenAPI
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
             string signatureResult = "";
-            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = signature.GenerateSignature("", method, nonceStr, ProjectEnvironment.privateKey, requestUrl, signType, timestamp, ProjectEnvironment.environment);
             signatureResult = "sha256 " + signatureResult;
             GetVoucherByCodeResult result = new GetVoucherByCodeResult();
             try
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ProjectEnvironment.accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
@@ -166,16 +166,16 @@ namespace RevenueMonsterOpenAPI
             return result;
         }
 
-        public async Task<GetVoucherBatchesResult> GetVoucherBatches(string accessToken, string privateKey, string environment)
+        public async Task<GetVoucherBatchesResult> GetVoucherBatches()
         {
             string method = "get";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
-            if (environment == "sandbox")
+            if (ProjectEnvironment.environment == "sandbox")
             {
                 requestUrl = String.Concat(Url.SandBoxOpen, "/v3/voucher-batches");
             }
-            else if (environment == "production")
+            else if (ProjectEnvironment.environment == "production")
             {
                 requestUrl = String.Concat(Url.ProductionOpen, "/v3/voucher-batches");
             }
@@ -183,13 +183,13 @@ namespace RevenueMonsterOpenAPI
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
             string signatureResult = "";
-            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = signature.GenerateSignature("", method, nonceStr, ProjectEnvironment.privateKey, requestUrl, signType, timestamp, ProjectEnvironment.environment);
             signatureResult = "sha256 " + signatureResult;
             GetVoucherBatchesResult result = new GetVoucherBatchesResult();
             try
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ProjectEnvironment.accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);
@@ -214,16 +214,16 @@ namespace RevenueMonsterOpenAPI
         }
 
 
-        public async Task<GetVoucherBatchByKeyResult> GetVoucherBatchByKey(string batchKey, string accessToken, string privateKey, string environment)
+        public async Task<GetVoucherBatchByKeyResult> GetVoucherBatchByKey(string batchKey)
         {
             string method = "get";
             string nonceStr = RandomString.GenerateRandomString(32);
             string requestUrl = "";
-            if (environment == "sandbox")
+            if (ProjectEnvironment.environment == "sandbox")
             {
                 requestUrl = String.Concat(Url.SandBoxOpen, "/v3/voucher-batch/" + batchKey);
             }
-            else if (environment == "production")
+            else if (ProjectEnvironment.environment == "production")
             {
                 requestUrl = String.Concat(Url.ProductionOpen, "/v3/voucher-batch/" + batchKey);
             }
@@ -231,13 +231,13 @@ namespace RevenueMonsterOpenAPI
             string timestamp = Convert.ToString((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             Signature signature = new Signature();
             string signatureResult = "";
-            signatureResult = signature.GenerateSignature("", method, nonceStr, privateKey, requestUrl, signType, timestamp, environment);
+            signatureResult = signature.GenerateSignature("", method, nonceStr, ProjectEnvironment.privateKey, requestUrl, signType, timestamp, ProjectEnvironment.environment);
             signatureResult = "sha256 " + signatureResult;
             GetVoucherBatchByKeyResult result = new GetVoucherBatchByKeyResult();
             try
             {
                 HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ProjectEnvironment.accessToken);
                 client.DefaultRequestHeaders.Add("X-Nonce-Str", nonceStr);
                 client.DefaultRequestHeaders.Add("X-Signature", signatureResult);
                 client.DefaultRequestHeaders.Add("X-Timestamp", timestamp);

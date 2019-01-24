@@ -11,19 +11,19 @@ namespace RevenueMonsterOpenAPI
 {
     public class Authorization
     {
-        public async Task<ClientCredentials> GetClientCredentials(string clientId, string clientSecret, string environment)
+        public async Task<ClientCredentials> GetClientCredentials()
         {
             ClientCredentials result = new ClientCredentials();
             try
             {
-                string parameter = String.Concat(clientId, ":", clientSecret);
+                string parameter = String.Concat(ProjectEnvironment.clientId, ":", ProjectEnvironment.clientSecret);
                 string encodeParameter = Encode.Base64Encode(parameter);
                 string url = "";
-                if (environment == "sandbox")
+                if (ProjectEnvironment.environment == "sandbox")
                 {
                     url = String.Concat(Url.SandBoxOAuth, "/v1/token");
                 }
-                else if (environment == "production")
+                else if (ProjectEnvironment.environment == "production")
                 {
                     url = String.Concat(Url.ProductionOAuth, "/v1/token");
                 }
@@ -59,19 +59,19 @@ namespace RevenueMonsterOpenAPI
             return result;
         }
 
-        public async Task<ClientCredentials> RefreshToken(string clientId, string clientSecret, string refreshToken, string environment)
+        public async Task<ClientCredentials> RefreshToken()
         {
             ClientCredentials result = new ClientCredentials();
             try
             {
-                string parameter = String.Concat(clientId, ":", clientSecret);
+                string parameter = String.Concat(ProjectEnvironment.clientId, ":", ProjectEnvironment.clientSecret);
                 string encodeParameter = Encode.Base64Encode(parameter);
                 string url = "";
-                if (environment == "sandbox")
+                if (ProjectEnvironment.environment == "sandbox")
                 {
                     url = String.Concat(Url.SandBoxOAuth, "/v1/token");
                 }
-                else if (environment == "production")
+                else if (ProjectEnvironment.environment == "production")
                 {
                     url = String.Concat(Url.ProductionOAuth, "/v1/token");
                 }
@@ -79,7 +79,7 @@ namespace RevenueMonsterOpenAPI
                 var values = new
                 {
                     grantType = "refresh_token",
-                    refreshToken = refreshToken
+                    refreshToken = ProjectEnvironment.refreshToken
                 };
 
                 var content = JsonConvert.SerializeObject(values);

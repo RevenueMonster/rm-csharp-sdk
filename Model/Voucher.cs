@@ -77,11 +77,4 @@ namespace RevenueMonsterOpenAPI.Model
         public string createdAt { get; set; }
         public string updatedAt { get; set; }
     }
-
-    public class Expiry
-    {
-        public string type { get; set; }
-        public Int64 day { get; set; }
-        public string expiredAt { get; set; }
-    }
 }
