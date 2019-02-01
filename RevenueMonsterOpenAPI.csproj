@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="Authorization.cs" />
     <Compile Include="Constant\Url.cs" />
+    <Compile Include="Model\Meta.cs" />
+    <Compile Include="ProjectEnvironment.cs" />
     <Compile Include="Loyalty.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\ClientCredentials.cs" />
